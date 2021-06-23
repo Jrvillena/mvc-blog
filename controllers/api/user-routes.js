@@ -5,6 +5,10 @@ const {
     Comment
 } = require('../../models');
 
+// create user
+
+
+
 // Get all users
 router.get('/', (req, res) => {
     User.findAll({

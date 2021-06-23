@@ -7,57 +7,42 @@ const {
 } = require('../models');
 
 
-router.get('/', async (req, res) => {
-
-    try{
-        const postData = await Post.findAll({
-            include: [User]
+router.get('/', (req, res) => {
+    Post.findAll({
+            attributes: [
+                'id',
+                'title',
+                'content',
+                'created_at'
+            ],
+            include: [{
+                    model: Comment,
+                    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                    include: {
+                        model: User,
+                        attributes: ['username']
+                    }
+                },
+                {
+                    model: User,
+                    attributes: ['username']
+                }
+            ]
         })
+        .then(dbPostData => {
+            const posts = dbPostData.map(post => post.get({
+                plain: true
+            }));
 
-        const posts = postData.map((post)=> post.get({plain:true}));
-
-        res.render('all-posts', {posts});
-
-    }catch(err){
-        res.status(500).json(err)
-    }
-    // Post.findAll({
-        
-
-    //         // attributes: [
-    //         //     'id',
-    //         //     'title',
-    //         //     'content',
-    //         //     'created_at'
-    //         // ],
-    //         // include: [{
-    //         //         model: Comment,
-    //         //         attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-    //         //         include: {
-    //         //             model: User,
-    //         //             attributes: ['username']
-    //         //         }
-    //         //     },
-    //         //     {
-    //         //         model: User,
-    //         //         attributes: ['username']
-    //         //     }
-    //         // ]
-    //     })
-    //     .then(dbPostData => {
-    //         const posts = dbPostData.map(post => post.get({
-    //             plain: true
-    //         }));
-
-    //         res.render('homepage', {
-    //             posts,
-    //             loggedIn: req.session.loggedIn
-    //         });
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         res.status(500).json(err);
-    //     });
+            res.render("homepage", {
+                posts,
+                loggedIn: req.session.loggedIn
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
 
 router.get('/post/:id', (req, res) => {

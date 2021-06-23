@@ -7,7 +7,7 @@ title: Model-View-Controller (MVC) Challenge: Tech Blog
 student: Justin Villena
 description: Build a CMS-style blog site similar to a Wordpress site, where developers can publish their blog posts and comment on other developers’ posts as well.
 git hub repo - https://github.com/Jrvillena/mvc-blog
-video link -
+video link -https://www.youtube.com/watch?v=pEXS7zrPlSQ
 <br>
 <br>
 GIVEN a CMS-style blog site<br>
